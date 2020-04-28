@@ -258,6 +258,27 @@
       <SubType>compile</SubType>
       <Link>FreeRTOSConfig.h</Link>
     </Compile>
+    <Compile Include="FreeRTOS\heap_2.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FreeRTOS\list.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FreeRTOS\mpu_wrappers.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FreeRTOS\port.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FreeRTOS\queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FreeRTOS\tasks.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FreeRTOS\timers.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="hooks.c">
       <SubType>compile</SubType>
       <Link>hooks.c</Link>
