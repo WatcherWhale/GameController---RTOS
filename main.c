@@ -13,7 +13,7 @@
 
 #include "LedWander.h"
 
-char direction[18];
+char direction[20];
 volatile int currentLed = 0;
 volatile int ledDirection = 1;
 volatile int ledCounter = 0;
@@ -36,8 +36,16 @@ int main(void)
 
 	while(1)
 	{
-		//scanf("%s", direction);
-		//DriverLedWrite(1 << currentLed);
+		scanf("%s", direction);
+		
+		if(strcmp(direction,"looplicht_links"))
+		{
+			ledDirection = -1;
+		}
+		else if(strcmp(direction, "looplicht_rechts"))
+		{
+			ledDirection = 1;
+		}
 	}
 
 	return 0;
@@ -63,7 +71,11 @@ ISR(TCC0_OVF_vect)
 	
 	if(ledCounter == 3000)
 	{
-		currentLed = (currentLed + ledDirection) % 4;
+		currentLed = (currentLed + ledDirection);
+		
+		if(currentLed == -1) currentLed = 3;
+		if(currentLed == 4) currentLed = 0;
+		
 		DriverLedWrite(1 << currentLed);
 		
 		ledCounter = 0;
