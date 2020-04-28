@@ -15,6 +15,8 @@
 
 #include <stdio.h>
 
+#include "Tasks/LedWanderTask.h"
+
 int main(void)
 {
 	DriverSysClkXtalInit();	//Clock init
@@ -30,7 +32,7 @@ int main(void)
 	_delay_ms(10);
 
 	//Init tasks
-
+	InitLedWanderTask();
 
 	vTaskStartScheduler();	//Start scheduler loop
 

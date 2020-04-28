@@ -42,7 +42,7 @@
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
     <avrtoolinterface>PDI</avrtoolinterface>
-    <avrtoolserialnumber>00A20003137E</avrtoolserialnumber>
+    <avrtoolserialnumber>00A200028032</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0x1E9747</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_avrdragon>
       <ToolOptions>
@@ -51,7 +51,7 @@
         <InterfaceName>PDI</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.avrdragon</ToolType>
-      <ToolNumber>00A20003137E</ToolNumber>
+      <ToolNumber>00A200028032</ToolNumber>
       <ToolName>AVR Dragon</ToolName>
     </com_atmel_avrdbg_tool_avrdragon>
     <com_atmel_avrdbg_tool_simulator>
@@ -288,6 +288,18 @@
       <Link>hwconfig.h</Link>
     </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Tasks\LedWanderTask.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Tasks\LedWanderTask.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Tasks\TemplateTask.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Tasks\TemplateTask.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
