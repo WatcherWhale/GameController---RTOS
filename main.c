@@ -1,14 +1,18 @@
 #include "hwconfig.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "DriverSysClk.h"
 #include "DriverUSART.h"
 #include "DriverCursorStick.h"
 #include "DriverAdc.h"
 #include "DriverLed.h"
-#include "Driverpl9823.h"
+#include "DriverPl9823.h"
 
-#include <avr/interrupt.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
+
 #include <stdio.h>
 
 int main(void)
@@ -25,10 +29,10 @@ int main(void)
 
 	_delay_ms(10);
 
-	while(1)
-	{
-		
-	}
+	//Init tasks
+
+
+	vTaskStartScheduler();	//Start scheduler loop
 
 	return 0;
 }
