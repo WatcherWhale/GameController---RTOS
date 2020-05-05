@@ -10,6 +10,8 @@ volatile char direction[20];
 volatile int ledDirection = -1;
 volatile int ledCounter = 0;
 
+void Recursion();
+
 void InitLedWanderTask(void)
 {
 	xTaskCreate( LedWanderJob, "doLed", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL );
@@ -41,16 +43,25 @@ static void LedWanderJob(void *pvParameters)
 
 static void DirectionChangeJob(void *pvParameters)
 {
-	char taskInfo[512]; 
+	char taskInfo[512];
+	size_t stackSize;
+	void* data;
 	
 	while(1)
 	{
+		HiddenOverflow();
+
 		vTaskGetRunTimeStats(taskInfo);
-		printf(taskInfo);
-		printf("\r\n");
-		
+		printf("%s\r\n", taskInfo);
+
 		scanf("%s", direction);
-		printf(direction);
+		printf("%s\r\n", direction);
+
+		data = pvPortMalloc(16);
+		stackSize = xPortGetFreeHeapSize();
+
+		printf("%p\r\n", data);
+		printf("%u\r\n", stackSize);
 		
 		if(strcmp(direction,"looplicht_links"))
 		{
@@ -61,6 +72,24 @@ static void DirectionChangeJob(void *pvParameters)
 			ledDirection = 1;
 		}
 	}
+}
+
+void Recursion()
+{
+	TaskStatus_t taskInfo;
+	vTaskGetTaskInfo(NULL, &taskInfo, pdTRUE, eInvalid);
+	char a[18];
+	printf("Stack Size: %d\r\n", taskInfo.usStackHighWaterMark);
+	printf("Pointer: %p\r\n", a);
+	scanf("%s", a);
+	Recursion();
+}
+
+void GetStackInfo()
+{
+	vTaskGetTaskInfo(NULL, &taskInfo, pdTRUE, eInvalid);
+
+	printf("Stack Size: %d\r\n", taskInfo.usStackHighWaterMark);
 }
 
 /*
@@ -78,4 +107,23 @@ _delay_ms doet dit niet.
 vTaskDelayUntil verzekerd dat dit altijd gebeurt omdat het de tijd opslaagt wanneer de laatste call gebeurt is.
 
 3e) Nu houdt de scheduler geen rekening meer met de prioriteit van de tasks. Er wordt nu enkel nog naar de scanf gekeken want deze wacht op een SYSCALL
+
+4a)
+Output:
+	0x26c2
+	4681
+
+Als je teveel geheugen alloceert zal het 4de ledje snel beginnen knipperen. 
+En wordt het volgende geprint:
+	ERROR: memory allocation failed
+	
+4b)
+	Stack Size: 197                                                
+	Pointer: 0x2342                                                 
+	Stack Size: 99                                                 
+	Pointer: 0x230d                                
+	STACK overflow in task terminal
+	
+	De pointer adressen dalen
+	
 */
