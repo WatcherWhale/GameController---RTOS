@@ -42,7 +42,7 @@
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
     <avrtoolinterface>PDI</avrtoolinterface>
-    <avrtoolserialnumber>00A200028032</avrtoolserialnumber>
+    <avrtoolserialnumber>00A20003137E</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0x1E9747</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_avrdragon>
       <ToolOptions>
@@ -51,7 +51,7 @@
         <InterfaceName>PDI</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.avrdragon</ToolType>
-      <ToolNumber>00A200028032</ToolNumber>
+      <ToolNumber>00A20003137E</ToolNumber>
       <ToolName>AVR Dragon</ToolName>
     </com_atmel_avrdbg_tool_avrdragon>
     <com_atmel_avrdbg_tool_simulator>
@@ -223,12 +223,13 @@
     <Compile Include="Drivers\DriverLed.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Drivers\Driverpl9823.h">
+      <SubType>compile</SubType>
+      <Link>Drivers\Driverpl9823.h</Link>
+    </Compile>
     <Compile Include="Drivers\Driverpl9823Bitbang.c">
       <SubType>compile</SubType>
       <Link>Drivers\Driverpl9823Bitbang.c</Link>
-    </Compile>
-    <Compile Include="Drivers\DriverPower.h">
-      <SubType>compile</SubType>
     </Compile>
     <Compile Include="Drivers\DriverSysClk.c">
       <SubType>compile</SubType>
@@ -260,24 +261,31 @@
     </Compile>
     <Compile Include="FreeRTOS\heap_2.c">
       <SubType>compile</SubType>
+      <Link>FreeRTOS\heap_2.c</Link>
     </Compile>
     <Compile Include="FreeRTOS\list.c">
       <SubType>compile</SubType>
+      <Link>FreeRTOS\list.c</Link>
     </Compile>
     <Compile Include="FreeRTOS\mpu_wrappers.c">
       <SubType>compile</SubType>
+      <Link>FreeRTOS\mpu_wrappers.c</Link>
     </Compile>
     <Compile Include="FreeRTOS\port.c">
       <SubType>compile</SubType>
+      <Link>FreeRTOS\port.c</Link>
     </Compile>
     <Compile Include="FreeRTOS\queue.c">
       <SubType>compile</SubType>
+      <Link>FreeRTOS\queue.c</Link>
     </Compile>
     <Compile Include="FreeRTOS\tasks.c">
       <SubType>compile</SubType>
+      <Link>FreeRTOS\tasks.c</Link>
     </Compile>
     <Compile Include="FreeRTOS\timers.c">
       <SubType>compile</SubType>
+      <Link>FreeRTOS\timers.c</Link>
     </Compile>
     <Compile Include="hooks.c">
       <SubType>compile</SubType>
@@ -290,17 +298,13 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Tasks\LedWanderTask.c">
+    <Compile Include="Tasks\transfertask.c">
       <SubType>compile</SubType>
+      <Link>Tasks\transfertask.c</Link>
     </Compile>
-    <Compile Include="Tasks\LedWanderTask.h">
+    <Compile Include="Tasks\transfertask.h">
       <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Tasks\TemplateTask.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Tasks\TemplateTask.h">
-      <SubType>compile</SubType>
+      <Link>Tasks\transfertask.h</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

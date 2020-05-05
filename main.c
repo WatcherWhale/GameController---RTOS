@@ -6,16 +6,17 @@
 #include "DriverSysClk.h"
 #include "DriverUSART.h"
 #include "DriverCursorStick.h"
+#include "DriverPower.h"
 #include "DriverAdc.h"
 #include "DriverLed.h"
-#include "DriverPl9823.h"
+#include "Driverpl9823.h"
+
+#include "transfertask.h"
 
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
 #include <stdio.h>
-
-#include "Tasks/LedWanderTask.h"
 
 int main(void)
 {
@@ -23,7 +24,10 @@ int main(void)
 	DriverUSARTInit();		//USART init and link to stdio
 	DriverCursorstickInit();//Initialize cursor stick
 	DriverLedInit();		//Initialize LED's
+	DriverPowerInit();		//Initialize aux power driver
 	DriverAdcInit();		//Initialize ADC driver
+	DriverPL9823Init();		//Initialize RGB LED driver
+
 
 	//Enable interrupts
 	PMIC.CTRL=0b111;		
@@ -32,8 +36,9 @@ int main(void)
 	_delay_ms(10);
 
 	//Init tasks
-	InitLedWanderTask();
+	InitTransferTasks();
 
+	
 	vTaskStartScheduler();	//Start scheduler loop
 
 	return 0;
