@@ -46,6 +46,8 @@ ISR(USART_TXC_vect)
 	char ch;
 	BaseType_t wokenToken = pdFALSE;
 	
+	USART.STATUS = 0b01000000;
+	
 	if(xQueueIsQueueEmptyFromISR(usartTXCQueue) == pdFALSE)
 	{
 		xQueueReceiveFromISR(usartTXCQueue, &ch, &wokenToken);
