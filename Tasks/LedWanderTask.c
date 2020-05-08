@@ -6,7 +6,9 @@
 
 #include <util/delay.h>
 
-volatile char direction[20];
+#include "../Drivers/DriverUSART.h"
+
+volatile char direction[6] = {'H', 'E', 'Y', '\r', '\n', '\0'};
 volatile int ledDirection = -1;
 volatile int ledCounter = 0;
 
@@ -40,26 +42,32 @@ static void LedWanderJob(void *pvParameters)
 }
 
 static void DirectionChangeJob(void *pvParameters)
-{
-	char taskInfo[512]; 
-	
+{	
 	while(1)
 	{
-		vTaskGetRunTimeStats(taskInfo);
-		printf(taskInfo);
-		printf("\r\n");
+		//vTaskGetRunTimeStats(taskInfo);
+		//printf(taskInfo);
+		//printf("\r\n");
 		
-		scanf("%s", direction);
-		printf(direction);
+		//scanf("%s", direction);
+		//printf(direction);
 		
-		if(strcmp(direction,"looplicht_links"))
+		/*if(strcmp(direction,"looplicht_links"))
 		{
 			ledDirection = -1;
 		}
 		else if(strcmp(direction, "looplicht_rechts"))
 		{
 			ledDirection = 1;
-		}
+		}*/
+
+		//usart_putstring(direction, 6);
+		char ch = 'H';
+
+		stdio_putchar('A', NULL);
+		stdio_putchar('A', NULL);
+		//usart_putchar(&ch);
+		//usart_putchar('\0');
 	}
 }
 

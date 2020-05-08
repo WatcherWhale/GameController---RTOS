@@ -1,43 +1,54 @@
 #include "DriverUSART.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdio.h>
-#include "hwconfig.h"
-#include "simusart.h"
 
-static int stdio_putchar(char c, FILE * stream);
-static int stdio_getchar(FILE *stream);
 static FILE UsartStdio = FDEV_SETUP_STREAM(stdio_putchar, stdio_getchar,_FDEV_SETUP_RW);
-
-
+static volatile QueueHandle_t usartTXCQueue;
+static volatile int sendByte = 0;
 
 void DriverUSARTInit(void)
 {
 	USART_PORT.DIRSET=0b00001000;	
 	USART_PORT.DIRCLR=0b00000100;
 	
-	USART.CTRLA=0b00000000;
-	USART.CTRLB=0b00011000;
-	USART.CTRLC=0b00000011;	
+	USART.CTRLA = 0b00111100;
+	USART.CTRLB = 0b00011000;
+	USART.CTRLC = 0b00000011;	
 	
 	USART.BAUDCTRLA=0xE5; //BSEL=3301, BSCALE=-5 19200 baud
-	USART.BAUDCTRLB=0xBC; 
+	USART.BAUDCTRLB=0xBC;
 	
 	stdout=&UsartStdio;
 	stdin=&UsartStdio;
+	
+	usartTXCQueue = xQueueCreate(100, sizeof(char));
 }
 
-
-static int stdio_putchar(char c, FILE * stream)
+int stdio_putchar(char c, FILE * stream)
 {
-	USART.DATA = c;
-	while (!(USART.STATUS & 0b01000000));
-	USART.STATUS=0b01000000;
+	if(xQueueIsQueueEmptyFromISR(usartTXCQueue) == pdTRUE)
+	{
+		USART.DATA = c;
+	}
+	else
+	{
+		xQueueSendToBack(usartTXCQueue, &c, 10);
+	}
+	
 	return 0;
 }
 	
-static int stdio_getchar(FILE *stream)
+int stdio_getchar(FILE *stream)
 {
 	return SimUsartGetChar();
 }
 
+ISR(USART_TXC_vect)
+{
+	char ch;
+	BaseType_t wokenToken = pdFALSE;
+	
+	if(xQueueIsQueueEmptyFromISR(usartTXCQueue) == pdFALSE)
+	{
+		xQueueReceiveFromISR(usartTXCQueue, &ch, &wokenToken);
+		USART.DATA = ch;
+	}	
+}
