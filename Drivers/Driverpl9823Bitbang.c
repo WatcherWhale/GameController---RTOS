@@ -11,6 +11,5 @@ void DriverPL9823Init()
 
 void DriverPL9823Set(uint32_t FrontLeft,uint32_t FrontRight,uint32_t RearRight,uint32_t RearLeft)
 {
-	
-	DriverPL9823BitbangSet(FrontLeft, FrontRight, RearRight, RearLeft);
+	DriverPL9823BitbangSet(PL9823_PURPLE, PL9823_PURPLE, PL9823_PURPLE, PL9823_PURPLE);
 }

@@ -296,6 +296,12 @@
     <Compile Include="Tasks\LedWanderTask.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Tasks\RGBLedTask.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Tasks\RGBLedTask.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Tasks\TemplateTask.c">
       <SubType>compile</SubType>
     </Compile>

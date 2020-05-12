@@ -16,6 +16,7 @@
 #include <stdio.h>
 
 #include "Tasks/LedWanderTask.h"
+#include "Tasks/RGBLedTask.h"
 
 int main(void)
 {
@@ -24,6 +25,8 @@ int main(void)
 	DriverCursorstickInit();//Initialize cursor stick
 	DriverLedInit();		//Initialize LED's
 	DriverAdcInit();		//Initialize ADC driver
+
+	InitRGB();
 
 	//Enable interrupts
 	PMIC.CTRL=0b111;		

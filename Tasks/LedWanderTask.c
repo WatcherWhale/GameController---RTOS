@@ -14,19 +14,21 @@ volatile int ledCounter = 0;
 
 void InitLedWanderTask(void)
 {
-	xTaskCreate( LedWanderJob, "doLed", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, NULL );
-	xTaskCreate( DirectionChangeJob, "terminal", configMINIMAL_STACK_SIZE + 512, NULL, tskIDLE_PRIORITY + 3, NULL );	
+	xTaskCreate( LedWanderJob, "doLed", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL );
+	xTaskCreate( DirectionChangeJob, "terminal", configMINIMAL_STACK_SIZE + 512, NULL, tskIDLE_PRIORITY, NULL );	
 }
 
 static void LedWanderJob(void *pvParameters)
 {
 	int currentLed = 0;
-	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = portTICK_PERIOD_MS * 500;
-	xLastWakeTime = xTaskGetTickCount();
+	TickType_t xLastWakeTime = xTaskGetTickCount();
+	const uint64_t freq = 100;
+	const TickType_t xFrequency = portTICK_PERIOD_MS * freq;
+	volatile uint64_t tStart, jitter, tStop, maxJitter;
 	
 	while (1)
 	{
+		tStart = portGET_RUN_TIME_COUNTER_VALUE();
 		currentLed = (currentLed + ledDirection);
 		
 		if(currentLed == -1) currentLed = 3;
@@ -34,40 +36,32 @@ static void LedWanderJob(void *pvParameters)
 		
 		DriverLedWrite(1 << currentLed);
 		
-		
-		//_delay_ms(5000);
-		//vTaskDelay(portTICK_PERIOD_MS * 500);
 		vTaskDelayUntil(&xLastWakeTime, xFrequency);
+		tStop = portGET_RUN_TIME_COUNTER_VALUE();
+		
+		jitter = tStop - tStart - xFrequency;
+		
+		if(maxJitter <= jitter) maxJitter = jitter;
+		
+		printf("Jitter: %lu \r\n", jitter);
+		printf("Max: %lu\r\n", maxJitter);
 	}
 }
 
 static void DirectionChangeJob(void *pvParameters)
 {	
 	while(1)
-	{
-		//vTaskGetRunTimeStats(taskInfo);
-		//printf(taskInfo);
-		//printf("\r\n");
+	{		
+		scanf("%s", direction);
 		
-		//scanf("%s", direction);
-		//printf(direction);
-		
-		/*if(strcmp(direction,"looplicht_links"))
+		if(strcmp(direction,"looplicht_links"))
 		{
 			ledDirection = -1;
 		}
 		else if(strcmp(direction, "looplicht_rechts"))
 		{
 			ledDirection = 1;
-		}*/
-
-		//usart_putstring(direction, 6);
-		char ch = 'H';
-
-		stdio_putchar('A', NULL);
-		stdio_putchar('A', NULL);
-		//usart_putchar(&ch);
-		//usart_putchar('\0');
+		}
 	}
 }
 
@@ -86,4 +80,9 @@ _delay_ms doet dit niet.
 vTaskDelayUntil verzekerd dat dit altijd gebeurt omdat het de tijd opslaagt wanneer de laatste call gebeurt is.
 
 3e) Nu houdt de scheduler geen rekening meer met de prioriteit van de tasks. Er wordt nu enkel nog naar de scanf gekeken want deze wacht op een SYSCALL
+
+
+7a) Jitter = 3192200
+	Max	   = 3192220
+
 */
