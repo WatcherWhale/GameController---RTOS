@@ -82,7 +82,7 @@ vTaskDelayUntil verzekerd dat dit altijd gebeurt omdat het de tijd opslaagt wann
 3e) Nu houdt de scheduler geen rekening meer met de prioriteit van de tasks. Er wordt nu enkel nog naar de scanf gekeken want deze wacht op een SYSCALL
 
 
-7a) Jitter = 3192200
-	Max	   = 3192220
+7a) Jitter = 3184836
+	Max	   = 3184848
 
 */
