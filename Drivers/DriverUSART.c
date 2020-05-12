@@ -3,6 +3,7 @@
 static FILE UsartStdio = FDEV_SETUP_STREAM(stdio_putchar, stdio_getchar,_FDEV_SETUP_RW);
 static volatile QueueHandle_t usartTXCQueue;
 static volatile int sendByte = 0;
+static volatile BaseType_t isBusy = pdFALSE;
 
 void DriverUSARTInit(void)
 {
@@ -24,7 +25,7 @@ void DriverUSARTInit(void)
 
 int stdio_putchar(char c, FILE * stream)
 {
-	if(xQueueIsQueueEmptyFromISR(usartTXCQueue) == pdTRUE)
+	if(uxQueueMessagesWaiting(usartTXCQueue) == 0 && (USART.STATUS & 0b00100000) == 0b00100000)
 	{
 		USART.DATA = c;
 	}
@@ -52,5 +53,5 @@ ISR(USART_TXC_vect)
 	{
 		xQueueReceiveFromISR(usartTXCQueue, &ch, &wokenToken);
 		USART.DATA = ch;
-	}	
+	}
 }

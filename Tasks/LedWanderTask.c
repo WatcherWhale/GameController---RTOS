@@ -60,14 +60,8 @@ static void DirectionChangeJob(void *pvParameters)
 		{
 			ledDirection = 1;
 		}*/
-
-		//usart_putstring(direction, 6);
-		char ch = 'H';
-
-		stdio_putchar('A', NULL);
-		stdio_putchar('A', NULL);
-		//usart_putchar(&ch);
-		//usart_putchar('\0');
+		
+		printf("HELLO WORLD!\r");
 	}
 }
 
