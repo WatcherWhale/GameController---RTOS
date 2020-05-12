@@ -25,14 +25,13 @@ void DriverUSARTInit(void)
 
 int stdio_putchar(char c, FILE * stream)
 {
-	if(uxQueueMessagesWaiting(usartTXCQueue) == 0 && isBusy == pdFALSE)
+	if(uxQueueMessagesWaiting(usartTXCQueue) == 0 && (USART.STATUS & 0b00100000) == 0b00100000)
 	{
 		USART.DATA = c;
-		isBusy = pdTRUE;
 	}
 	else
 	{
-		xQueueSendToBack(usartTXCQueue, &c, 1);
+		xQueueSendToBack(usartTXCQueue, &c, 10);
 	}
 	
 	return 0;
@@ -54,9 +53,5 @@ ISR(USART_TXC_vect)
 	{
 		xQueueReceiveFromISR(usartTXCQueue, &ch, &wokenToken);
 		USART.DATA = ch;
-	}
-	else
-	{
-		isBusy = pdFALSE;
 	}
 }
